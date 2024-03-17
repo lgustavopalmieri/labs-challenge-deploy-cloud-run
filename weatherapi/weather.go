@@ -1,28 +1,20 @@
 package weatherapi
 
-
 type Location struct {
-	Name            string  `json:"name"`
-	Region          string  `json:"region"`
-	Country         string  `json:"country"`
-	Latitude        float64 `json:"lat"`
-	Longitude       float64 `json:"lon"`
-	TimezoneID      string  `json:"tz_id"`
-	LocaltimeEpoch  int64   `json:"localtime_epoch"`
-	Localtime       string  `json:"localtime"`
-}
-
-type Condition struct {
-	Text string `json:"text"`
-	Icon string `json:"icon"`
-	Code int    `json:"code"`
+	Localtime string `json:"localtime"`
 }
 
 type CurrentWeather struct {
-	TemperatureC     float64    `json:"temp_c"`
+	TemperatureC float64 `json:"temp_c"`
 }
 
 type WeatherResponse struct {
 	Location Location       `json:"location"`
 	Current  CurrentWeather `json:"current"`
+}
+
+type Temperature struct {
+	Celsius    float64 `json:"celsius"`
+	Fahrenheit float64 `json:"fahrenheit"`
+	Kelvin     float64 `json:"kelvin"`
 }

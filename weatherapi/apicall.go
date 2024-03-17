@@ -13,11 +13,6 @@ func CelsiusToKelvin(celsius float64) float64 {
 	return celsius + 273
 }
 
-type Temperature struct {
-	Celsius    float64 `json:"celsius"`
-	Fahrenheit float64 `json:"fahrenheit"`
-	Kelvin     float64 `json:"kelvin"`
-}
 
 func GetWeather(city string) (*Temperature, error) {
 	url := "https://api.weatherapi.com/v1/current.json?q=" + city + "&key=360ddfd38d0d4cd3b72102808240403"
