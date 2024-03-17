@@ -1,0 +1,64 @@
+package viacepapi
+
+import (
+	"encoding/json"
+	"io"
+	"log"
+	"net/http"
+	"net/url"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/lgustavopalmieri/labs-challenge-deploy-cloud-run/weatherapi"
+)
+
+func HandleTemp2(w http.ResponseWriter, r *http.Request) {
+	cep := chi.URLParam(r, "cep")
+	if !validateCEP(cep) {
+		http.Error(w, "invalid zipcode", http.StatusNotFound)
+		log.Println("invalid zipcode", cep)
+		return
+	}
+	url1 := "http://viacep.com.br/ws/" + cep + "/json/"
+	req, err := http.NewRequest(http.MethodGet, url1, nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var data ResultViaCep
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if data.Erro == "true" {
+		http.Error(w, "cannot find zipcode", http.StatusNotFound)
+		log.Println("cannot find zipcode", cep)
+		return
+	}
+
+	cidade := data.Localidade
+	temperatura, _ := weatherapi.GetWeather(url.QueryEscape(cidade))
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"temperature_C": temperatura.Celsius,
+		"temperature_F": temperatura.Fahrenheit,
+		"temperature_K": temperatura.Kelvin,
+	})
+}

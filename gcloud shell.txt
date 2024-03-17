@@ -1,0 +1,15 @@
+criar repositório artifact registry
+
+gcloud auth configure-docker southamerica-east1-docker.pkg.dev
+
+
+docker hub: lgustavopalmieri/labs-deploy-cloudrun:latest
+
+docker pull docker.io/lgustavopalmieri/labs-deploy-cloudrun:latest
+
+docker images > id da imagem > 1e0a3a945ab0
+
+tentativa 1:
+docker tag 1e0a3a945ab0 southamerica-east1-docker.pkg.dev/go-expert-cloudrun/goexpertlabscloudrun/labs-image:1e0a3a945ab0
+
+docker push southamerica-east1-docker.pkg.dev/go-expert-cloudrun/goexpertlabscloudrun/labs-image:1e0a3a945ab0
