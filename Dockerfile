@@ -6,4 +6,6 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o cloudrun
 FROM scratch
 WORKDIR /app
 COPY --from=build /app/cloudrun .
+ENV PORT=8080
+EXPOSE 8080
 ENTRYPOINT ["./cloudrun"]

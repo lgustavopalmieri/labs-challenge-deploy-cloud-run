@@ -23,17 +23,6 @@ func validateCEP(cep string) bool {
 	return regex.MatchString(cep)
 }
 
-// GetTemperature godoc
-// @Summary      GetTemperature
-// @Description  This API is designed to provide a seamless integration of location and weather information 
-// @Tags         temperature
-// @Accept       json
-// @Produce      json
-// @Param        cep   path      string  true "cep"
-// @Success      200   object  string   "successful response"
-// @Failure      422   object  string   "invalid zipcode"
-// @Failure      404   object  string   "can not find zipcode"
-// @Router       /temperature/{cep} [get]
 func HandleTemp(w http.ResponseWriter, r *http.Request) {
 	cep := chi.URLParam(r, "cep")
 	if !validateCEP(cep) {
